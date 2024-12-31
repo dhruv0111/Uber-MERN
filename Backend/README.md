@@ -236,3 +236,113 @@ GET /users/logout
   "message": "Unauthorized"
 }
 ```
+
+# Captain API Documentation
+
+## Register Captain
+
+Registers a new captain in the system.
+
+### Endpoint
+
+```
+POST /captain/register
+```
+
+### Request Body
+
+| Field              | Type     | Description                              | Required |
+|-------------------|----------|------------------------------------------|----------|
+| fullname.firstname| string   | Captain's first name (min 3 chars)       | Yes      |
+| fullname.lastname | string   | Captain's last name (min 3 chars)        | No       |
+| email            | string   | Captain's email address                  | Yes      |
+| password         | string   | Captain's password (min 6 chars)         | Yes      |
+| vehicle.color    | string   | Vehicle color (min 3 chars)             | Yes      |
+| vehicle.plate    | string   | Vehicle plate number (min 3 chars)      | Yes      |
+| vehicle.capacity | number   | Vehicle passenger capacity (min 1)       | Yes      |
+| vehicle.vehicleType| string   | Type of vehicle (car/motorcycle/auto)   | Yes      |
+
+### Example Request
+
+```json
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.captain@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "black",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+### Response
+
+#### Success Response (201 Created)
+
+```json
+{
+  "token": "jwt_token_string",
+  "captain": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.captain@example.com",
+    "vehicle": {
+      "color": "black",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive",
+    "_id": "captain_id"
+  }
+}
+```
+
+#### Error Responses
+
+##### 400 Bad Request
+- When required fields are missing or invalid
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid Email",
+      "param": "email",
+      "location": "body"
+    },
+    {
+      "msg": "Firstname must be at least 3 characters long",
+      "param": "fullname.firstname",
+      "location": "body"
+    }
+  ]
+}
+```
+
+##### 400 Bad Request
+- When captain already exists
+
+```json
+{
+  "message": "Captain already exist"
+}
+```
+
+##### 500 Internal Server Error
+- When server encounters an error
+
+```json
+{
+  "status": "error",
+  "message": "Internal server error"
+}
+```

@@ -10,11 +10,8 @@ const http = require('http');
 const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
-
-
-
-
 const  userRoutes = require('./routes/user.routes')
+const captainRoutes = require('./routes/captain.routes');
 
 connectToDb();
 
@@ -29,6 +26,7 @@ app.get('/', (req, res)=>{
 });
 
 app.use('/users', userRoutes);
+app.use('/captains', captainRoutes);
 
 server.listen(port, ()=>{
     console.log(`Server is running on port ${port}`);
